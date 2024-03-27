@@ -1,0 +1,62 @@
+import pygame
+import math
+
+# Initialize Pygame
+pygame.init()
+
+# Set up the display
+width, height = 800, 600
+screen = pygame.display.set_mode((width, height))
+pygame.display.set_caption("Ball Bouncing in Circle")
+
+# Colors
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+RED = (255, 0, 0)
+
+# Circle parameters
+circle_center = (width // 2, height // 2)
+circle_radius = min(width, height) // 3
+
+# Ball parameters
+ball_radius = 20
+ball_color = RED
+ball_speed = 5  # Adjust speed as needed
+gravity = 0.1  # Adjust gravity as needed
+vertical_speed = 0
+
+# Initial ball position (center of the circle)
+ball_x = circle_center[0]
+ball_y = circle_center[1] - circle_radius
+
+# Main loop
+clock = pygame.time.Clock()
+running = True
+
+while running:
+    screen.fill(WHITE)
+
+    # Draw the circle
+    pygame.draw.circle(screen, BLACK, circle_center, circle_radius, 2)
+
+    # Draw the ball
+    pygame.draw.circle(screen, ball_color, (int(ball_x), int(ball_y)), ball_radius)
+
+    # Update ball position (falling and bouncing)
+    vertical_speed += gravity
+    ball_y += vertical_speed
+
+    if ball_y > circle_center[1] + circle_radius - ball_radius:  # Bounce back up when ball reaches bottom of circle
+        ball_y = circle_center[1] + circle_radius - ball_radius
+        vertical_speed *= -0.8  # Adjust bounce factor as needed
+
+    # Event handling
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    pygame.display.flip()
+    clock.tick(60)
+
+# Quit Pygame
+pygame.quit(5)

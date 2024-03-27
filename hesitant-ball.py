@@ -1,16 +1,22 @@
 import matplotlib.pyplot as plt
 from matplotlib.patches import Circle
+import numpy as np
+import threading
 import time
 import Ball
 
+def close_plot():
+    plt.pause(10)
+    plt.close()
+
 # Define circle parameters
-circle_radius = 10
+circle_radius = 5
 
 # Create figure and axis
 fig, ax = plt.subplots()
 
+# Set axis background color to black
 ax.set_facecolor('black')
-
 
 # Draw circle
 circle = Circle((0, 0), circle_radius, edgecolor='white', facecolor='black')
@@ -19,14 +25,12 @@ ax.add_patch(circle)
 # Define ball parameters
 my_ball = Ball.Ball(size=0.1, weight=10, direction=(0, -1), speed=10, height=5, kinetic=500, gpe=500)
 
-# Size
-ball_radius = my_ball.size
-
-# Height
-ball_y = my_ball.height
+# Initial position of the ball
+ball_x = 0
+ball_y = circle_radius - my_ball.size  # Start at 12 o'clock position
 
 # Draw ball
-ball = plt.Circle((1, ball_y), ball_radius, color='gray')
+ball = plt.Circle((ball_x, ball_y), my_ball.size, color='gray')
 ax.add_artist(ball)
 
 # Set axis limits
@@ -36,19 +40,7 @@ ax.set_ylim(-circle_radius - 1, circle_radius + 1)
 # Set aspect ratio to equal to make the circle circular
 ax.set_aspect('equal', adjustable='box')
 
-# Show plot
-plt.gcf().set_facecolor('black')
-plt.grid(True)
-plt.show()
-
-# find the speed of the ball in each second and assign it to self.speed
-def each_second(ball):
-    # total energy at all time is gpe + kinetic = 1000
-    ball.gpe = ball.weight * 9.8 * ball.height
-    ball.kinetic = 1000 - ball.gpe
-    ball.speed = ball.kinetic * 2 / ball.weight 
-
-
+# Function to update ball position
 def update_position():
     while True:
         # Calculate new position based on direction and speed
@@ -63,13 +55,15 @@ def update_position():
         # Update ball position
         ball.set_center((ball_x, ball_y))
         plt.pause(0.1)  # Pause to visualize the movement
+        
+# Start a thread to update ball position
+thread = threading.Thread(target=update_position)
+thread.start()
 
-# whenever the ball hits the circle, it should bounce back
-# use tangent, cos, sin of the angle of the hit to calculate that
-# def hit():
-    
+# Show plot
+plt.grid(True)
+plt.show()
 
-
-
-plt.pause(5)
-plt.close()
+# Start a thread to close the plot after 10 seconds
+thread = threading.Thread(target=close_plot)
+thread.start()
