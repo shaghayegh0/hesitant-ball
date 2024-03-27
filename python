@@ -1,0 +1,46 @@
+import matplotlib.pyplot as plt
+from matplotlib.patches import Circle
+import time
+import Ball
+
+# Define circle parameters
+circle_radius = 10
+
+# Create figure and axis
+fig, ax = plt.subplots()
+
+ax.set_facecolor('black')
+
+
+# Draw circle
+circle = Circle((0, 0), circle_radius, edgecolor='white', facecolor='black')
+ax.add_patch(circle)
+
+# Define ball parameters
+my_ball = Ball.Ball(size=0.1, weight=10, direction=(0, -1), speed=10, height=5, kinetic=500, gpe=500)
+
+# Size
+ball_radius = my_ball.size
+
+# Height
+ball_y = my_ball.height
+
+# Draw ball
+ball = plt.Circle((0, ball_y), ball_radius, color='gray')
+ax.add_artist(ball)
+
+# Set axis limits
+ax.set_xlim(-circle_radius - 1, circle_radius + 1)
+ax.set_ylim(-circle_radius - 1, circle_radius + 1)
+
+# Set aspect ratio to equal to make the circle circular
+ax.set_aspect('equal', adjustable='box')
+
+# Show plot
+plt.gcf().set_facecolor('black')
+plt.grid(True)
+
+
+plt.show()
+plt.pause(5)
+plt.close()

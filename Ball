@@ -1,0 +1,9 @@
+class Ball:
+    def __init__(self, size, weight, direction, speed):
+        self.size = 0.1
+        self.weight = 10
+        self.direction = (0,-1)
+        self.speed = 10
+        self.height = 5
+        self.kinetic = 500 
+        self.GPE = 500
